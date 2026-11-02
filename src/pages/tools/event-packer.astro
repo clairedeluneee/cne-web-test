@@ -18,22 +18,26 @@ import FileUpload from '../../components/FileUpload.astro';
                     {
                         name: 'Event Script <span style="color: var(--primary-color);" title=".hx, .hxs, .hxc, .hscript">(hscript file)</span>',
                         required: true,
-                        icon: 'script'
+                        icon: 'script',
+                        accept: '.hx,.hscript,.hxs,.hsc'
                     },
                     {
                         name: 'Parameters (.json)',
                         required: true,
-                        icon: 'json'
+                        icon: 'json',
+                        accept: '.json'
                     },
                     {
                         name: 'Icon (.png)',
                         required: false,
-                        icon: 'image'
+                        icon: 'image',
+                        accept: '.png,.jpg,.jpeg'
                     },
                     {
                         name: 'UI Script (.ui.hx)<sup style="color: var(--primary-color); cursor: help;" title="Script that generates a dynamic\nicon inside the Chart Editor\n\nThis field is not required">?</sup>',
                         required: false,
-                        icon: 'ui-script'
+                        icon: 'ui-script',
+                        accept: '.ui.hx,.ui.hscript,.ui.hxs,.ui.hsc'
                     }
                 ].map((a) => (
                     <div class="subpanel" style="display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 3px;">
@@ -44,14 +48,87 @@ import FileUpload from '../../components/FileUpload.astro';
                                 (a.required) && <sup style="color: #f33; cursor: help; font-size: 1.3em;" title="This field is required">*</sup>
                             }
                         </div>
-                        <FileUpload/>
+                        <FileUpload inputid={'input-field-' + a.icon} accept={a.accept}/>
                     </div>
                 ))
             }
-            <button style="display: flex; width: 100%;">
+            <button style="display: flex; width: 100%;" id="submit-form">
                 <img src={(import.meta.env.DEV?'':import.meta.env.BASE_URL)+'/'+"img/icons/pixel/download.png"} alt=" " width="16" height="16" style="image-rendering: pixelated;"/>
                 &nbsp;&nbsp;Pack Event Files
             </button>
         </div>
     </div>
+
+    {/* astro < script > tags are processed while building. this is Not an inline script so "async" does work ok */}
+    <script>
+        // https://developer.mozilla.org/en-US/docs/Web/API/Window/btoa
+        function bytesToBase64(bytes:any) {
+            const binString = Array.from(bytes, (byte:number) =>
+                String.fromCodePoint(byte),
+            ).join("");
+            return window.btoa(binString);
+        }
+        async function submitThing(e:MouseEvent) {
+            // the button, used for displaying the disabled style
+            const butt = (e.target as HTMLButtonElement);
+
+            const separator = '________PACKSEP________';
+            const script = document.querySelector('#input-field-script') as HTMLInputElement;
+            const json = document.querySelector('#input-field-json') as HTMLInputElement;
+            const image = document.querySelector('#input-field-image') as HTMLInputElement;
+            const uiScript = document.querySelector('#input-field-ui-script') as HTMLInputElement;
+
+            if (script?.files == null || script?.files[0] == null) {
+                window.alert('No script file was uploaded!');
+                return;
+            }
+            if (json?.files == null || json?.files[0] == null) {
+                window.alert('No parameters file was uploaded!');
+                return;
+            }
+
+            if (butt != null) {
+                butt.style.cursor = 'wait';
+                butt.disabled = true;
+            }
+
+            var resultString = script.files[0].name + separator;
+            resultString += (await script.files[0].text()).trim();
+            resultString += separator;
+            resultString += (await json.files[0].text()).trim();
+            
+            if ((image.files && image.files[0])
+                || (uiScript.files && uiScript.files[0]))
+                resultString += separator;
+
+            if (image.files && image.files[0]) {
+                resultString += bytesToBase64(new TextEncoder().encode(await image.files[0].text()));
+            } else {
+                resultString += '-';
+            }
+
+            if (uiScript.files && uiScript.files[0]) {
+                resultString += separator;
+                resultString += (await uiScript.files[0].text()).trim();
+            }
+
+            //console.log(resultString);
+
+            var filename = script.files[0].name.replace(/\.(hx|hscript|hxs|hsc)$/, '.pack');
+            // https://stackoverflow.com/a/73775602
+            var element = document.createElement('a');
+            element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(resultString));
+            element.setAttribute('download', filename);
+            element.style.display = 'none';
+            document.body.appendChild(element);
+            element.click();
+            document.body.removeChild(element);
+
+            if (butt != null) {
+                butt.style.cursor = '';
+                butt.disabled = false;
+            }
+        }
+        document.getElementById('submit-form')?.addEventListener('click', submitThing);
+    </script>
 </Page>

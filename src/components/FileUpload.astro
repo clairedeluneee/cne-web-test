@@ -1,8 +1,12 @@
 ---
 import '../styles/global.css';
+interface Props {
+    inputid ?: string,
+    accept ?: string
+}
+const { inputid, accept } = Astro.props;
 ---
-<style>
-
+<style is:global>
     .custom-file-upload {
         display: flex;
         padding: 8px;
@@ -29,13 +33,6 @@ import '../styles/global.css';
         background-position: center;
     }
 
-    div.fakefile {
-        position: absolute;
-        top: 0px;
-        left: 0px;
-        z-index: 1;
-    }
-
     input.file {
         cursor: pointer;
         position: absolute;
@@ -45,12 +42,13 @@ import '../styles/global.css';
         z-index: 0;
         font-size: 3em;
     }
+
     input.file::file-selector-button {
         cursor: pointer;
     }
 </style>
 <div class="custom-file-upload phantommuff">
-    <input type="file" class="file" />
+    <input type="file" class="file" id={inputid} accept={accept}/>
     <img src={(import.meta.env.DEV?'':import.meta.env.BASE_URL)+'/'+"img/icons/pixel/upload.png"} alt=" " width="16" height="16" style="image-rendering: pixelated;"/>
     <span>Upload...</span>
 </div>
@@ -62,10 +60,10 @@ import '../styles/global.css';
             const span = label.children[2];
             if (a.files[0] != null) {
                 const fileName = a.files[0].name;
-                span.innerText = fileName;
+                if (span) span.innerText = fileName;
                 label.classList.add('uploaded');
             } else {
-                span.innerText = 'Upload...';
+                if (span) span.innerText = 'Upload...';
                 label.classList.remove('uploaded');
             }
         };

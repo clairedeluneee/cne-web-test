@@ -8,8 +8,8 @@
     ["basics", "<span style='color: #6f3;'>Basics</span>", [
         ["xml", "XML Data Syntax"],
         ["character", "Characters"],
+        ["stage-editor", "Stages (in editor)"],
         ["stage", "Stages (XML)"],
-        ["stage-editor", "Stage Editor"],
         ["song", "Songs"],
         ["weeks", "Weeks"]
     ], true],
@@ -27,7 +27,8 @@
             ], true],
             ["states", "Scripting on Existing States"],
             ["global", "Global Script"]
-        ]]
+        ]],
+        ["flags", "Flags"]
     ], true],
     ["hard", "<span style='color: #fe8f5c;'>Hard</span>", [
         ["custom-states", "Custom States"],
@@ -38,12 +39,9 @@
             ["script", "Scripted"]
         ]],
         ["shaders", "Shaders"],
-        ["addons", "Addons and Their Use Cases"],
-        ["flags", "Flags"]
+        ["addons", "Addons and Their Use Cases"]
     ], true],
     ["expert", "<span style='color: #f13e5c;'>Expert</span>", [
-        ["modcharts", "Modcharting"],
-        ["3d-legacy", "3D with Away3D (Legacy)"],
         ["3d", "3D with Foxlite"],
         ["classes", "Scripted Classes"]
     ], true],

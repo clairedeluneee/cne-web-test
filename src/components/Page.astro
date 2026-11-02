@@ -67,7 +67,7 @@ const { title = 'Home', desc = 'cod name', noFooter = false } = Astro.props;
 	</head>
 	<body>
 		<header>
-			<a href={(import.meta.env.DEV?'':import.meta.env.BASE_URL)+'/'+"index"}>
+			<a href={(import.meta.env.DEV?'':import.meta.env.BASE_URL)+'/'}>
 				<img src={(import.meta.env.DEV?'':import.meta.env.BASE_URL)+'/'+"img/logo-banner.png"} alt="Codename Engine" width="250" class="desktop" />
             	<img src={(import.meta.env.DEV?'':import.meta.env.BASE_URL)+'/'+"img/logo-banner-mini.png"} alt="Codename Engine" width="100" class="mobile" />
 			</a>
@@ -94,11 +94,11 @@ const { title = 'Home', desc = 'cod name', noFooter = false } = Astro.props;
 				<div class="phantommuff" style="display: flex; align-items: center; justify-content: center;">
 					{
 						[
-							{name: 'Home', url: 'index'},
+							{name: 'Home', url: ''},
 							{name: 'API', url: 'api-docs/'},
 							{name: 'Wiki', url: 'wiki/index/'},
 							{name: 'Tools', url: 'tools/'},
-							{name: 'Contribute', url: 'https://github.com/CodenameCrew/cne-web-test/'}
+							{name: 'Contribute', url: 'https://github.com/CodenameCrew/codename-website/'}
 						].map((a) => (
 							<a href={(a.url.startsWith('http')?'':(import.meta.env.DEV?'':(import.meta.env.BASE_URL+'/')))+a.url} style="text-decoration: none;">
 								<button>{a.name}</button>
@@ -111,12 +111,12 @@ const { title = 'Home', desc = 'cod name', noFooter = false } = Astro.props;
 					{
 						[
 							['github', 'https://github.com/CodenameCrew/'],
-							['gamebanana', 'https://deltarune.com/lancer'],
-							['itch', 'https://deltarune.com/lancer'],
+							['gamebanana', 'https://codename-engine.com/img/icons/gamebanana.svg'],
+							['itch', 'https://nex-isdumb.itch.io/codename-engine'],
 							['discord', 'https://discord.gg/codename-crew'],
-							['twitter', 'https://deltarune.com/lancer'],
-							['bluesky', 'https://deltarune.com/lancer'],
-							['youtube', 'https://deltarune.com/lancer'],
+							['twitter', 'https://twitter.com/FNFCodenameEG'],
+							['bluesky', 'https://bsky.app/profile/codename-engine.com'],
+							['youtube', 'https://youtube.com/@CodenameEngine'],
 							
 						].map((a) => (
 							<a href={a[1]} style="text-decoration: none;">

@@ -24,7 +24,7 @@ const donators = poop.donators.sort((a, b) => {
 });
 
 function getIconButton(i:string) {
-	return `<img src="${(import.meta.env.DEV?'':import.meta.env.BASE_URL)}/img/icons/${i}.svg" width="20" style="margin-right: 7px;"/> `
+	return `<img src="${(import.meta.env.DEV?'':import.meta.env.BASE_URL)}/img/icons/${i}.svg" height="20" style="margin-right: 7px;"/> `
 }
 // this sucks
 function getShowCondition(a:any) {
@@ -46,12 +46,11 @@ function getShowCondition(a:any) {
 	}
 
 	.mod-container {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 8px;
-		overflow-x: hidden;
-		overflow-y: scroll;
-		justify-content: space-evenly;
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 4px;
+		overflow: hidden auto;
+		max-height: 100%;
 	}
 
 	@media screen and (max-width: 1000px) {
@@ -105,60 +104,77 @@ function getShowCondition(a:any) {
 					<td>
 						<div style="display: flex;">
 						{
-							[`${getIconButton('github')} GitHub`,
-							 `${getIconButton('gamebanana')} GameBanana`,
-							 `${getIconButton('itch')} itch.io`].map((a) => (
-								<button set:html={a}/>
+							[
+								{name:`${getIconButton('github')} GitHub`, 			link: "https://github.com/CodenameCrew/CodenameEngine/releases"},
+							 	{name:`${getIconButton('gamebanana')} GameBanana`, 	link: "https://gamebanana.com/mods/download/598553"},
+							 	{name:`${getIconButton('itch')} itch.io`, 		   	link: "https://nex-isdumb.itch.io/codename-engine/purchase"}
+							].map((j) => (
+								<a href={j.link} style="text-decoration: none;">
+								<button set:html={j.name}/>
+								</a>
 							))
 						}
 						</div>
 					</td>
 				</tr>
 				<tr class="experimental-table-elem">
-					<td class="name">Experimental<span style="font-size: 4em;">*</span></td>
+					<td class="name">Experimental<br/>(downloadable)<span style="font-size: 4em;">*</span></td>
 					<td>
 						<div style="display: flex;">
 						{
-							[`${getIconButton('os/windows')} Windows`,
-							 /*`${getIconButton('os/apple')} Mac`,*/
-							 `${getIconButton('os/linux')} Linux`].map((a) => (
-								<button set:html={a}/>
+							[
+								{name:`${getIconButton('os/windows')} Windows`, link: "https://nightly.link/CodenameCrew/CodenameEngine/workflows/windows/main/Codename%20Engine.zip"},
+								{name:`${getIconButton('os/apple')} MacOS`, 	link: "https://nightly.link/CodenameCrew/CodenameEngine/workflows/macos/main/Codename%20Engine.zip"},
+								{name:`${getIconButton('os/linux')} Linux`, 	link: "https://nightly.link/CodenameCrew/CodenameEngine/workflows/linux/main/Codename%20Engine.zip"}
+							].map((j) => (
+								<a href={j.link} style="text-decoration: none;">
+								<button set:html={j.name}/>
+								</a>
 							))
 						}
 						</div>
 						<p style="width: 24em;">
-							* <span style="color: var(--primary-color); font-size: 0.9em;">These downloads come directly from our GitHub Actions and run on the latest changes.<br/><br/>They might be unstable as they're really new, use them at risk of bugs!</span>
+							* <span style="color: var(--primary-color); font-size: 0.9em;">These downloads come directly from our GitHub Actions and run on the latest changes.<br/>They might be unstable as they're really new, use them at risk of bugs!</span>
 						</p>
 					</td>
 				</tr>
 			</table>
 			<br/>
-			<i>
-			Make sure to join our official <a href="https://deltarune.com/lancer" target="_blank">Discord Server</a>!
-			<br/>You can contribute to this website by going to the <a href="https://deltarune.com/lancer" target="_blank">Website repository</a>
+			Make sure to join our official <a href="https://discord.gg/codename-crew" target="_blank">Discord Server</a>!
+			<br/>You can contribute to this website by going to the <a href="https://github.com/CodenameCrew/codename-website/" target="_blank">Website repository</a>
 			<br/>You can find the engine source by going to the <a href="https://github.com/CodenameCrew/CodenameEngine/" target="_blank">Engine repository</a>
-			</i>
 		</div>
 		<div class="panel" style="display: flex; flex-direction: column;" x-data="{ curSelected: 'All' }">
-			<h3 style="text-align: center;">Mods</h3>
+			<div style="display: flex; align-items: center; justify-content: space-between;">
+				<h2 style="margin: 0;">Mods</h2>
+				<div style="display: flex; justify-content: center; margin-bottom: 5px;">
+					<a href="https://deltarune.com/lancer/" target="_blank" style="text-decoration: none; width: 100%;">
+						<button style="width: 100%; margin: 0;" set:html={`${getIconButton('external')} Submit your own!`}/>
+					</a>
+				</div>
+			</div>
 			<div style="display: flex; justify-content: center; margin-bottom: 5px;">
 			{
-				['All', 'Featured', 'Loved', 'Admin Pick', 'Upcoming'].map((a) => (
-					<button x-on:click={`curSelected = '${a}'`} x-bind:class={`curSelected == '${a}' ? null : 'col-black'`}>{a}</button>
+				['All', 'Featured', 'Admin Pick', 'Upcoming'].map((a) => (
+					<button x-on:click={`curSelected = '${a}'`} x-bind:class={`curSelected == '${a}' ? null : 'col-black'`}
+					style="width: 100%;">{a}</button>
 				))
 			}
 			</div>
-			<div style="display: flex; justify-content: center; margin-bottom: 5px;">
-				<a href="https://deltarune.com/lancer/" target="_blank" style="text-decoration: none; width: 100%;">
-					<button style="width: 100%;" set:html={`${getIconButton('external')} Submit your own!`}/>
-				</a>
-			</div>
-			<div class="subpanel mod-container" style="height: 100%; max-height: 54vh;">
+			<hr style="width: 100%;"/>
+			<div class="subpanel" style="height: 60vh;">
+				<div class="mod-container">
 				{
-					mods.map((a:any) => (
+					(mods.length > 0) ? mods.map((a:any) => (
 						<Mod data={a.data} id={a.id} show={getShowCondition(a)} />
-					))
+					)) : (
+						<div style="width: 200%;">
+						<h2 style="margin: 0;">Nothing here yet...</h2>
+						<i>One day... a mod will be here... it may be yours... hopefully.</i><br/>						
+						</div>
+					)
 				}
+				</div>
 			</div>
 		</div>
 		<div class="panel" style="grid-column: 1/3; padding: 32px; padding-top: 0; text-align: center;">
@@ -191,7 +207,18 @@ function getShowCondition(a:any) {
 		TODO: implement the widget
 		PLEASE i cant get it to work somehow
 	-->
-	<button onclick='window.open("https://ko-fi.com/codename_engine", "_blank")' style="border-radius: 2px; position: fixed; bottom: 1vw; left: 1vw; z-index: 999;">
+	<!--<button onclick='window.open("https://ko-fi.com/codename_engine", "_blank")' style="border-radius: 2px; position: fixed; bottom: 1vw; left: 1vw; z-index: 999;">
 		<img src="https://storage.ko-fi.com/cdn/logomarkLogo.png" width="20" alt="Ko-fi"/>&nbsp;Donate
-	</button>
+	</button> -->
+
+	<script src='https://storage.ko-fi.com/cdn/scripts/overlay-widget.js' is:inline/>
+	<script is:inline>
+	kofiWidgetOverlay.draw('codename_engine', {
+		'type': 'floating-chat',
+		'floating-chat.donateButton.text': 'Donate',
+		'floating-chat.donateButton.background-color': '#b265bd',
+		'floating-chat.donateButton.text-color': '#fff',
+		'floating-chat.stylesheets': '["https://codename-engine.com/ko-fi.css"]',
+	});
+	</script>
 </Page>
