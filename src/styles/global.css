@@ -91,7 +91,8 @@ button:disabled {
     background-position: center 60%;
     box-shadow: none;
     outline: 2px dotted var(--primary-color);
-    color: color-mix(in srgb, var(--primary-color), var(--text-color))
+    color: color-mix(in srgb, var(--primary-color), var(--text-color));
+    cursor: not-allowed;
 }
 
 hr {
@@ -100,7 +101,7 @@ hr {
     border-image-source: linear-gradient(to right, var(--secondary-color), var(--primary-color), var(--secondary-color));
 }
 
-button:hover {
+button:hover:not(:disabled) {
     filter: brightness(133%);
 }
 

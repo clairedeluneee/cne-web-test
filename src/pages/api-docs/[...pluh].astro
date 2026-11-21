@@ -85,7 +85,7 @@ const deprecated = entry.fields.filter((a:any) => (isDeprecated(a)));
         vars.map((a:any) => (<div id={a.name} class={a?.doc?.text && "subpanel with-desc"}>
             <InlineCode lang="haxe" code={generateFieldText(a)}/>
             <br/>{((a?.doc != null) && (a?.doc?.text != undefined)) ?
-            <Fragment set:html={md.render(a.doc.text)}/>
+            <Fragment set:html={md.render(a.doc.text.replaceAll('\n', '\n\n'))}/>
             : ''}
         </div><hr/>))
     }
@@ -100,7 +100,7 @@ const deprecated = entry.fields.filter((a:any) => (isDeprecated(a)));
         funcs.map((a:any) => (<div id={a.name} class={a?.doc?.text && "subpanel with-desc"}>
             <InlineCode lang="haxe" code={generateFieldText(a)}/>
             <br/>{((a?.doc != null) && (a?.doc?.text != undefined)) ?
-            <Fragment set:html={md.render(a.doc.text)}/>
+            <Fragment set:html={md.render(a.doc.text.replaceAll('\n', '\n\n'))}/>
             : ''}
         </div><hr/>))
     }
